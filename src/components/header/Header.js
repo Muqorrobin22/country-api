@@ -1,15 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { ThemeProvider } from "styled-components";
+import { GlobalStyles } from "../GlobalStyles";
+import { lightTheme, darkTheme } from "../Theme";
+import { ReactComponent as Moon } from "../../assets/icon-moon.svg";
+import { ReactComponent as Sun } from "../../assets/icon-sun.svg";
 
 function Header() {
+  const [theme, setTheme] = useState("light");
+  const themeToggler = () => {
+    theme === "light" ? setTheme("dark") : setTheme("light");
+  };
   return (
-    <HeaderWrap>
-      <h1>Where in the world</h1>
-      <div className="logo">
-        <h1>logo</h1>
-        <h2>Dark Mode</h2>
-      </div>
-    </HeaderWrap>
+    <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
+      <GlobalStyles />
+      <HeaderWrap theme={theme}>
+        <h1>Where in the world</h1>
+        <div className="logo">
+          {theme === "light" ? (
+            <Moon onClick={themeToggler} />
+          ) : (
+            <Sun onClick={themeToggler} />
+          )}
+          <h2>{theme === "light" ? "Dark " : "Light "} Mode</h2>
+        </div>
+      </HeaderWrap>
+    </ThemeProvider>
   );
 }
 
@@ -30,13 +46,19 @@ const HeaderWrap = styled.header`
   .logo {
     display: flex;
     align-items: center;
+    background-color: #2b3844;
+    padding: 0.4rem 1rem;
+    border-radius: 30px;
+    color: white;
+    margin-left: 2rem;
+    font-family: Nunito Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
     h2 {
-      margin-left: 2rem;
-      font-family: Nunito Sans;
-      font-style: normal;
-      font-weight: 600;
-      font-size: 16px;
-      line-height: 22px;
+      font-size: 10px;
+      margin-left: 1rem;
     }
   }
 
@@ -47,9 +69,11 @@ const HeaderWrap = styled.header`
       line-height: 33px;
     }
     .logo {
+      border-radius: 40px;
+      padding: 1rem 2rem;
       h2 {
         margin-left: 2rem;
-        font-size: 12px;
+        font-size: 15px;
       }
     }
   }

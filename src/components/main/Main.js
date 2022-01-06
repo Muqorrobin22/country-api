@@ -1,13 +1,14 @@
 import { useRef, useState } from "react";
 import styled from "styled-components";
 import Card from "../card/Card";
-import images from "../../assets/jermany.png";
 
 function Main() {
   const [country, setCountry] = useState([]);
+
   const inputRef = useRef();
 
-  function fecthData() {
+  function fecthData(e) {
+    e.preventDefault();
     const InputValue = inputRef.current.value;
     fetch(`https://restcountries.com/v3.1/name/${InputValue}`)
       .then((response) => response.json())
@@ -31,11 +32,13 @@ function Main() {
     <MainWrap>
       <div className="inputs">
         <div className="type-text">
-          <input
-            type="text"
-            placeholder="Search for a country…"
-            ref={inputRef}
-          />
+          <form onSubmit={fecthData}>
+            <input
+              type="text"
+              placeholder="Search for a country…"
+              ref={inputRef}
+            />
+          </form>
           <button onClick={fecthData}>Search</button>
         </div>
         <div className="type-select">
