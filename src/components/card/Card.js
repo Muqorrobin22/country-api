@@ -60,10 +60,6 @@ const CardWrap = styled.div`
       margin-top: 1rem;
     }
   }
-
-  @media (min-width: 1440px) {
-    margin-left: 8rem;
-  }
 `;
 
 export default Card;

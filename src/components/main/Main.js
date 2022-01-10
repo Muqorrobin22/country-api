@@ -1,51 +1,39 @@
 import { useRef, useState } from "react";
 import styled from "styled-components";
+import { useHttp, useRegion } from "../../hooks/use-http";
 import Card from "../card/Card";
 
 const optionValue = ["Africa", "America", "Asia", "Europe", "Oceania"];
 
 function Main() {
   const [country, setCountry] = useState([]);
-  const [isLoading, setLoading] = useState(false);
-  const [isError, setIsError] = useState(null);
-
   const inputRef = useRef();
 
-  async function fecthData(e) {
-    e.preventDefault();
-    const InputValue = inputRef.current.value;
-    setLoading(true);
-    setIsError(null);
-    try {
-      const response = await fetch(
-        `https://restcountries.com/v3.1/name/${InputValue}`
-      );
+  const manageData = (data) => {
+    const result = data.map((countryData) => {
+      return {
+        id: countryData.name.common,
+        title: countryData.name.common,
+        region: countryData.region,
+        capital: countryData.capital,
+        population: countryData.population,
+        images: countryData.flags.png,
+      };
+    });
 
-      if (!response.ok) {
-        throw new Error("Oops... Country not avaiable, try another country ");
-      }
+    console.log(result);
+    setCountry(result);
+  };
 
-      const data = await response.json();
+  const { isLoading, isError, fecthData } = useHttp(
+    { url: "https://restcountries.com/v3.1/name", input: inputRef },
+    manageData
+  );
 
-      const result = data.map((countryData) => {
-        return {
-          id: countryData.name.common,
-          title: countryData.name.common,
-          region: countryData.region,
-          capital: countryData.capital,
-          population: countryData.population,
-          images: countryData.flags.png,
-        };
-      });
-
-      console.log(result);
-      setCountry(result);
-    } catch (error) {
-      setIsError(error.message);
-    }
-
-    setLoading(false);
-  }
+  const { isLoading2, isError2, fetchRegion } = useRegion(
+    "https://restcountries.com/v3.1/region",
+    manageData
+  );
 
   let content = <p>UPS... No Countries Yet</p>;
 
@@ -63,48 +51,13 @@ function Main() {
     ));
   }
 
-  if (isError) {
+  if (isError || isError2) {
     content = <p>{isError}</p>;
   }
 
-  if (isLoading) {
+  if (isLoading || isLoading2) {
     content = <p>Loading...</p>;
   }
-
-  const coba = async (el) => {
-    const valueInput = el.target.value.toLowerCase();
-    setLoading(true);
-    setIsError(null);
-    try {
-      const response = await fetch(
-        `https://restcountries.com/v3.1/region/${valueInput}`
-      );
-
-      if (!response.ok) {
-        throw new Error("Oops... Country not avaiable, try another country ");
-      }
-
-      const data = await response.json();
-
-      const result = data.map((countryData) => {
-        return {
-          id: countryData.name.common,
-          title: countryData.name.common,
-          region: countryData.region,
-          capital: countryData.capital,
-          population: countryData.population,
-          images: countryData.flags.png,
-        };
-      });
-
-      console.log(result);
-      setCountry(result);
-    } catch (error) {
-      setIsError(error.message);
-    }
-
-    setLoading(false);
-  };
 
   return (
     <MainWrap>
@@ -125,7 +78,7 @@ function Main() {
             name="country"
             id="country"
             placeholder="Filter by Region"
-            onChange={coba}
+            onChange={fetchRegion}
           />
           <datalist id="countrys">
             {optionValue.map((data, i) => (
@@ -210,6 +163,7 @@ const MainWrap = styled.main`
       justify-content: center;
       .card {
         margin-top: 8rem;
+        margin-left: 8rem;
       }
     }
     .inputs {
