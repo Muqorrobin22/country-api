@@ -2,32 +2,110 @@ import { useRef, useState } from "react";
 import styled from "styled-components";
 import Card from "../card/Card";
 
+const optionValue = ["Africa", "America", "Asia", "Europe", "Oceania"];
+
 function Main() {
   const [country, setCountry] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+  const [isError, setIsError] = useState(null);
 
   const inputRef = useRef();
 
-  function fecthData(e) {
+  async function fecthData(e) {
     e.preventDefault();
     const InputValue = inputRef.current.value;
-    fetch(`https://restcountries.com/v3.1/name/${InputValue}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const result = data.map((countryData) => {
-          return {
-            id: countryData.name.common,
-            title: countryData.name.common,
-            region: countryData.region,
-            capital: countryData.capital,
-            population: countryData.population,
-            images: countryData.flags.png,
-          };
-        });
+    setLoading(true);
+    setIsError(null);
+    try {
+      const response = await fetch(
+        `https://restcountries.com/v3.1/name/${InputValue}`
+      );
 
-        console.log(result);
-        setCountry(result);
+      if (!response.ok) {
+        throw new Error("Oops... Country not avaiable, try another country ");
+      }
+
+      const data = await response.json();
+
+      const result = data.map((countryData) => {
+        return {
+          id: countryData.name.common,
+          title: countryData.name.common,
+          region: countryData.region,
+          capital: countryData.capital,
+          population: countryData.population,
+          images: countryData.flags.png,
+        };
       });
+
+      console.log(result);
+      setCountry(result);
+    } catch (error) {
+      setIsError(error.message);
+    }
+
+    setLoading(false);
   }
+
+  let content = <p>UPS... No Countries Yet</p>;
+
+  if (country.length > 0) {
+    content = country.map((data) => (
+      <div key={data.id} className="card">
+        <Card
+          images={data.images}
+          population={data.population}
+          title={data.title}
+          region={data.region}
+          capital={data.capital}
+        />
+      </div>
+    ));
+  }
+
+  if (isError) {
+    content = <p>{isError}</p>;
+  }
+
+  if (isLoading) {
+    content = <p>Loading...</p>;
+  }
+
+  const coba = async (el) => {
+    const valueInput = el.target.value.toLowerCase();
+    setLoading(true);
+    setIsError(null);
+    try {
+      const response = await fetch(
+        `https://restcountries.com/v3.1/region/${valueInput}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Oops... Country not avaiable, try another country ");
+      }
+
+      const data = await response.json();
+
+      const result = data.map((countryData) => {
+        return {
+          id: countryData.name.common,
+          title: countryData.name.common,
+          region: countryData.region,
+          capital: countryData.capital,
+          population: countryData.population,
+          images: countryData.flags.png,
+        };
+      });
+
+      console.log(result);
+      setCountry(result);
+    } catch (error) {
+      setIsError(error.message);
+    }
+
+    setLoading(false);
+  };
+
   return (
     <MainWrap>
       <div className="inputs">
@@ -47,29 +125,16 @@ function Main() {
             name="country"
             id="country"
             placeholder="Filter by Region"
+            onChange={coba}
           />
           <datalist id="countrys">
-            <option value="Africa" />
-            <option value="America" />
-            <option value="Asia" />
-            <option value="Europe" />
-            <option value="Oceania" />
+            {optionValue.map((data, i) => (
+              <option key={data} value={data} />
+            ))}
           </datalist>
         </div>
       </div>
-      <div className="countries">
-        {country.map((data) => (
-          <div key={data.id} className="card">
-            <Card
-              images={data.images}
-              population={data.population}
-              title={data.title}
-              region={data.region}
-              capital={data.capital}
-            />
-          </div>
-        ))}
-      </div>
+      <div className="countries">{content}</div>
     </MainWrap>
   );
 }
@@ -141,6 +206,12 @@ const MainWrap = styled.main`
 
   @media (min-width: 1440px) {
     padding: 6.6rem 8.1rem;
+    .countries {
+      justify-content: center;
+      .card {
+        margin-top: 8rem;
+      }
+    }
     .inputs {
       flex-direction: row;
       .type-text {

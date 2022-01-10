@@ -7,6 +7,16 @@ export const GlobalStyles = createGlobalStyle`
       background: ${({ theme }) => theme.input};
       color: ${({ theme }) => theme.inputWhite};
     }
+    .countries {
+      div {
+        background-color: ${({ theme }) => theme.backgroundBlack};
+        .info {
+          h1 , p{
+            color: ${({ theme }) => theme.inputWhite};
+          }
+        }
+      }
+    }
     transition: all 0.50s linear;
   }
   `;

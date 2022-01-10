@@ -1,10 +1,14 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 function Card({ images, population, region, capital, title }) {
   return (
     <CardWrap>
-      <img src={images} alt={images} />
+      <Link to={title}>
+        <img src={images} alt={images} />
+      </Link>
+
       <div className="info">
         <h1>{title}</h1>
         <div className="text">
@@ -23,13 +27,16 @@ const CardWrap = styled.div`
   border-radius: 5px;
   box-shadow: 0px 0px 7px 2px rgba(0, 0, 0, 0.0294384);
   overflow: hidden;
+  cursor: pointer;
   img {
     width: 100%;
+    height: 16rem;
   }
   .info {
     padding: 2.4rem;
     display: flex;
     flex-direction: column;
+    text-decoration: none;
     h1 {
       margin-bottom: 1.6rem;
       font-family: Nunito Sans;
@@ -38,7 +45,7 @@ const CardWrap = styled.div`
       font-size: 18px;
       line-height: 26px;
       /* identical to box height, or 144% */
-
+      text-decoration: none;
       color: black;
     }
     p {
@@ -48,10 +55,14 @@ const CardWrap = styled.div`
       font-size: 14px;
       line-height: 16px;
       /* identical to box height, or 114% */
-
+      text-decoration: none;
       color: black;
       margin-top: 1rem;
     }
+  }
+
+  @media (min-width: 1440px) {
+    margin-left: 8rem;
   }
 `;
 

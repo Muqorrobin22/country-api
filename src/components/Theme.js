@@ -11,4 +11,5 @@ export const darkTheme = {
   text: "#FAFAFA",
   toggleBorder: "#6B8096",
   background: "#999",
+  backgroundBlack: "#2B3844",
 };
