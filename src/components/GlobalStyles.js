@@ -17,6 +17,16 @@ export const GlobalStyles = createGlobalStyle`
         }
       }
     }
+    .detail-card {
+      .info {
+          h1 , p{
+            color: ${({ theme }) => theme.inputWhite};
+          }
+        }
+        .back {
+          background: ${({ theme }) => theme.input};
+        }
+    }
     transition: all 0.50s linear;
   }
   `;

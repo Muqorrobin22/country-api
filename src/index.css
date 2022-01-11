@@ -8,3 +8,17 @@ body {
 :root {
   font-size: 10px;
 }
+
+.no_data {
+  font-size: 20px;
+  position: absolute;
+  top: 200%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media (min-width: 1440px) {
+  .no_data {
+    font-size: 32px;
+  }
+}

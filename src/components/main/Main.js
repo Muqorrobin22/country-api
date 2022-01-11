@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import styled from "styled-components";
 import { useHttp, useRegion } from "../../hooks/use-http";
 import Card from "../card/Card";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const optionValue = ["Africa", "America", "Asia", "Europe", "Oceania"];
 
@@ -35,7 +36,7 @@ function Main() {
     manageData
   );
 
-  let content = <p>UPS... No Countries Yet</p>;
+  let content = <p className="error">UPS... No Countries Yet</p>;
 
   if (country.length > 0) {
     content = country.map((data) => (
@@ -52,11 +53,11 @@ function Main() {
   }
 
   if (isError || isError2) {
-    content = <p>{isError}</p>;
+    content = <p className="error">{isError}</p>;
   }
 
   if (isLoading || isLoading2) {
-    content = <p>Loading...</p>;
+    content = <ClipLoader color="green" size={60} />;
   }
 
   return (
@@ -155,6 +156,9 @@ const MainWrap = styled.main`
     .card {
       margin-top: 4rem;
     }
+    .error {
+      font-size: 20px;
+    }
   }
 
   @media (min-width: 1440px) {
@@ -164,6 +168,13 @@ const MainWrap = styled.main`
       .card {
         margin-top: 8rem;
         margin-left: 8rem;
+      }
+      .error {
+        font-size: 32px;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
     }
     .inputs {
