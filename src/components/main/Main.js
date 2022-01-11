@@ -22,7 +22,6 @@ function Main() {
       };
     });
 
-    console.log(result);
     setCountry(result);
   };
 
@@ -99,7 +98,7 @@ const MainWrap = styled.main`
   flex-direction: column;
   .inputs {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     flex-direction: column;
     justify-content: space-between;
     .type-text {
@@ -160,7 +159,14 @@ const MainWrap = styled.main`
       font-size: 20px;
     }
   }
-
+  @media (min-width: 700px) {
+    .inputs {
+      flex-direction: row;
+    }
+    input[type="text"] {
+      width: auto;
+    }
+  }
   @media (min-width: 1440px) {
     padding: 6.6rem 8.1rem;
     .countries {

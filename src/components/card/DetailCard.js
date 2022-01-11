@@ -9,8 +9,6 @@ function DetailCard() {
 
   const navigate = useNavigate();
 
-  console.log(params);
-
   const fetchData = useCallback(async () => {
     const response = await fetch(
       `https://restcountries.com/v3.1/name/${params.country}`
@@ -40,7 +38,6 @@ function DetailCard() {
         languages: language[0],
       };
     });
-    console.log(result);
     setCountry(result);
   }, [params]);
 
